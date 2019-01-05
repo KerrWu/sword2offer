@@ -346,5 +346,53 @@ ListNode* findEntrance(ListNode* head)
     
 }
 
+/*
+ 目标：反转输入列表。返回新列表的head节点
+ */
+
+/*
+ 思路
+ 在调整一个节点i时，需要有3个指针
+ 一个指向i pNode
+ 一个指向i前一个节点 pPre
+ 一个指向i后一个节点 pNext
+ 
+ 本来是ppre->pnode->pnext，
+ 
+ while(pnode!=nullptr)
+     首先pnext = pnode->next,
+        如果pnext == nullptr,则已到尾节点，ReversedHead = pnode
+     再令pnode->next = ppre,
+     ppre=pnode
+     pnode=pnext
+ */
+ListNode* reverseList(ListNode* head)
+{
+    if (head == nullptr)
+    {
+        std::cerr<<"head is a nullptr!\n";
+        exit(1);
+    }
+    
+    ListNode* pre = nullptr;
+    ListNode* pnode = head;
+    ListNode* reversedHead = nullptr;
+    ListNode* pnext = nullptr;
+    
+    while (pnode != nullptr)
+    {
+        pnext = pnode->next;
+        
+        if (pnext == nullptr)
+            reversedHead = pnode;
+        
+        pnode->next = pre;
+        pre = pnode;
+        pnode = pnext;
+    }
+   
+    return reversedHead;
+}
+
 
 #endif /* ListNode_h */
