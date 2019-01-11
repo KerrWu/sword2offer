@@ -10,6 +10,7 @@
 #define BinaryTree_h
 
 #include <assert.h>
+#include <stack>
 
 struct BinaryTreeNode
 {
@@ -18,11 +19,69 @@ struct BinaryTreeNode
     BinaryTreeNode* right = nullptr;
 };
 
+/*
+ 中序遍历非递归实现
+ */
+void inTravel(BinaryTreeNode* root)
+{
+    if (root == nullptr)
+        return;
+    
+    std::stack<BinaryTreeNode*> tempStack;
+    
+    BinaryTreeNode* p = root;
+    
+    while(!tempStack.empty() || p)
+    {
+        while(p)
+        {
+            tempStack.push(p);
+            p = p->left;
+        }
+        
+        if (!tempStack.empty())
+        {
+            p = tempStack.top();
+            std::cout<< p->value <<std::endl;
+            tempStack.pop();
+            p = p->right;
+        }
+    }
+}
 
 /*
- 给出前序遍历序列和中序遍历序列，还原二叉树  --  不含重复数字
+ 前序遍历非递归实现
  */
+void preTravel(BinaryTreeNode* root)
+{
+    if (root == nullptr)
+        return;
+    
+    std::stack<BinaryTreeNode*> tempStack;
+    
+    BinaryTreeNode* p = root;
+    
+    while(!tempStack.empty() || p)
+    {
+        while(p)
+        {
+            std::cout<<p->value<<std::endl;
+            tempStack.push(p->right);
+            p = p->left;
+        }
+        
+        if (!tempStack.empty())
+        {
+            p = tempStack.top();
+            tempStack.pop();
+        }
+    }
+}
 
+
+/*
+ 目标：给出前序遍历序列和中序遍历序列，还原二叉树  --  不含重复数字
+ */
 
 /*
  思路1:
@@ -78,5 +137,77 @@ BinaryTreeNode* construct(int* pre, int* mid, int length)
     如果只有右子树，则其下一个节点是其右子树的最左端节点
     如果左右子树都没有，则其下一个节点是其父节点
  */
+
+
+
+/*
+ 目标：输入两颗二叉树A，B，判断B是否是A的子树
+ */
+
+/*
+ 思路：遍历A，找到A中与B的root相等的子节点，再依次判断每一个节点
+ 用递归实现
+ 辅助函数f1：
+ 输入节点a，b
+ 先判断停止条件：
+ 如果其中一个为空，另一个不为空，返回False
+ 两个都为空，返回True
+ 否则：
+     如果都不为空且两者value不相等，返回False
+     如果两者value相等，则return f1(a->left, b->left) && f1(a->right,b->right)
+     即两个左右子树都相等才返回True
+ 
+ 主函数中，先遍历A，直到找到和B的root相等的节点，送入辅助函数中判断
+ */
+
+bool isSubAux(BinaryTreeNode* a, BinaryTreeNode* b)
+{
+    if (! (a&&b))
+    {
+        if (a==nullptr && b==nullptr)
+            return true;
+        else
+            return false;
+    }
+    
+    else
+    {
+        if (a->value != b->value)
+            return false;
+        else
+            return isSubAux(a->left, b->left) && isSubAux(a->right, b->right);
+    }
+        
+}
+
+bool isSubTree(BinaryTreeNode* a, BinaryTreeNode* b)
+{
+    if (a==nullptr && b==nullptr)
+    {
+        std::cerr<<"a b are all empty tree!";
+        exit(1);
+    }
+    
+    bool result = false;
+    
+    if (a!=nullptr && b!=nullptr)
+    {
+        if (a->value == b->value)
+            result = isSubAux(a, b);
+        if (result)
+            return true;
+        else
+        {
+            if (!result)
+                result = isSubTree(a->left, b);
+            if (!result)
+                result = isSubTree(a->right, b);
+        }
+
+    }
+    
+    return result;
+    
+}
 
 #endif /* BinaryTree_h */
