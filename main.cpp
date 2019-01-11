@@ -8,26 +8,13 @@
 
 #include <iostream>
 #include <ostream>
-#include "BinaryTree.h"
+#include "permutation.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    BinaryTreeNode* root = new BinaryTreeNode();
-    root->value = 2;
-    root->left = new BinaryTreeNode();
-    root->left->value = 1;
-    root->right = new BinaryTreeNode();
-    root->right->value = 3;
-    
-    serialize(root, cout);
-    
-    
-    BinaryTreeNode* root2 = nullptr;
-    BinaryTreeNode** p2root2 = &root2;
-    deserialize(p2root2, cin);
-    
-    serialize(root2, cout);
-    
+
+    char a[5] = "abcd";
+    permutation(a);
 
 }
