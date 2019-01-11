@@ -21,37 +21,39 @@
  
  保存中序遍历的上一个节点，在遍历到当前节点时，建立两者关系
  */
-
 void bst2list(BinaryTreeNode* head)
 {
-    if (head ==nullptr)
+    if (head == nullptr)
         return;
     
-    std::stack<BinaryTreeNode*> tempStack;
+    std::stack<BinaryTreeNode*> s;
+    BinaryTreeNode* temp = nullptr;
     
-    BinaryTreeNode* listHead = new BinaryTreeNode();
-    BinaryTreeNode* temp = listHead;
-    
-    while( !tempStack.empty() || head)
+    while (!s.empty() || head)
     {
-        while(head)
+        while (head)
         {
-            tempStack.push(head);
+            s.push(head);
             head = head->left;
         }
         
-        if (tempStack.empty())
+        if (s.empty())
             break;
-        head = tempStack.top();
-        temp->right = head;
-        head->left = temp;
-        tempStack.pop();
+        
+        head = s.top();
+        
+        if (temp != nullptr)
+        {
+            temp->right = head;
+            head->left = temp;
+        }
+        
         temp = head;
         head = head->right;
-        
+        s.pop();
+            
     }
     
 }
-
 
 #endif /* BST_h */

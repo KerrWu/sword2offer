@@ -7,29 +7,40 @@
 //
 
 #include <iostream>
-#include "ListNode.h"
+#include "BST.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
+    BinaryTreeNode* root = new BinaryTreeNode();
+    root->value = 2;
+    root->left = new BinaryTreeNode();
+    root->left->value = 1;
+    root->right = new BinaryTreeNode();
+    root->right->value = 3;
     
-    ListNode* head =  nullptr;
-    ListNode** pToHead = &head;
-    addToTail(pToHead, 1);
-    addToTail(pToHead, 2);
-    addToTail(pToHead, 3);
-    addToTail(pToHead, 4);
-    addToTail(pToHead, 5);
-    addToTail(pToHead, 6);
-    addToTail(pToHead, 7);
-    addToTail(pToHead, 8);
-    head->next->next->next->next->next = head->next->next;
+    bst2list(root);
     
-    ListNode* entrance = findEntrance(head);
+    while(root->left != nullptr)
+        root = root->left;
     
-    if (entrance==nullptr)
-        cout<<"not find"<<endl;
-    else
-        cout<<entrance->value<<endl;
+    while(true)
+    {
+        cout<<root->value<<endl;
+        
+        if (root->right == nullptr)
+            break;
+        else
+            root = root->right;
+    }
+    
+    while (root->left != nullptr)
+    {
+        root = root->left;
+        delete root->right;
+    }
+    
+
+    return 0;
 
 }
