@@ -7,7 +7,8 @@
 //
 
 #include <iostream>
-#include "BST.h"
+#include <ostream>
+#include "BinaryTree.h"
 
 using namespace std;
 
@@ -19,28 +20,14 @@ int main(int argc, const char * argv[]) {
     root->right = new BinaryTreeNode();
     root->right->value = 3;
     
-    bst2list(root);
+    serialize(root, cout);
     
-    while(root->left != nullptr)
-        root = root->left;
     
-    while(true)
-    {
-        cout<<root->value<<endl;
-        
-        if (root->right == nullptr)
-            break;
-        else
-            root = root->right;
-    }
+    BinaryTreeNode* root2 = nullptr;
+    BinaryTreeNode** p2root2 = &root2;
+    deserialize(p2root2, cin);
     
-    while (root->left != nullptr)
-    {
-        root = root->left;
-        delete root->right;
-    }
+    serialize(root2, cout);
     
-
-    return 0;
 
 }

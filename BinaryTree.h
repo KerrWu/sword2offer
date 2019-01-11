@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stack>
+#include <ostream>
 
 struct BinaryTreeNode
 {
@@ -209,5 +210,72 @@ bool isSubTree(BinaryTreeNode* a, BinaryTreeNode* b)
     return result;
     
 }
+
+/*
+ 目标：将一个二叉树通过输出流以前序遍历序列输出，遇到的空节点输出#,节点间以逗号作为间隔
+ */
+void serialize(BinaryTreeNode* root, std::ostream& stream)
+{
+    if (root == nullptr)
+    {
+        stream<<'#'<<std::endl;
+        return ;
+    }
+    
+    stream<<root->value<<std::endl;
+    serialize(root->left, stream);
+    serialize(root->right, stream);
+}
+
+/*
+ 目标：通过一个输入流给出的序列，反序列化出一个二叉树，将这个序列视为前序序列，空节点用特殊符号#作为输入
+ 返回这个二叉树的root
+ 
+ 由于从流中输入的可能为数字或者字符#，因此需要写一个辅助函数判断当前输入的是数字还是字符，数字则返回true
+ */
+
+/*
+ 辅助函数，如果输入是数字则存入number，返回true，
+ 否则，如果是#则返回false，否则输出错误信息；
+ */
+bool readStream(std::istream& stream, int &number)
+{
+    char inputChar;
+    stream>>inputChar;
+    int asiccNumber = inputChar;
+    
+    if (asiccNumber>=48 && asiccNumber<=57)
+    {
+        number = asiccNumber-48;
+        return true;
+    }
+    
+    else if (asiccNumber == 35)
+        return false;
+    else
+    {
+        
+        std::cout<<inputChar<<std::endl;
+        std::cerr<<"input must be int or #, not "<<inputChar<<'\n';
+        return false;
+
+    }
+}
+
+void deserialize(BinaryTreeNode** root, std::istream& stream)
+{
+    
+    int number;
+    if(readStream(stream, number))
+    {
+        *root = new BinaryTreeNode();
+        (*root)->value = number;
+        deserialize(&((*root)->left), stream);
+        deserialize(&((*root)->right), stream);
+    }
+    return;
+}
+
+
 
 #endif /* BinaryTree_h */
