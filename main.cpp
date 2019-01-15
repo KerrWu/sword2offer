@@ -7,14 +7,32 @@
 //
 
 #include <iostream>
-#include <ostream>
-#include "permutation.h"
+#include <istream>
+#include <set>
+#include <vector>
+#include <functional>
+#include <algorithm>
+#include "streamMedian.h"
 
 using namespace std;
 
+void printVector(const vector<int>& v)
+{
+    for(auto& elem:v)
+        cout<<elem<<endl;
+}
+
 int main(int argc, const char * argv[]) {
-
-    char a[5] = "abcd";
-    permutation(a);
-
+    
+    vector<int> myVector = {0,1,2,3,4,5,6,7};
+    
+    getStreamMedian get = getStreamMedian();
+    
+    int temp = 0;
+    
+    while (cin>>temp)
+        get.insert(temp);
+    
+    cout<<get.getMedian()<<endl;
+    
 }

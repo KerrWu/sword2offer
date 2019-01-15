@@ -38,16 +38,13 @@ int findPivot(int a[], int low, int high)
     {
         while (a[tail]>=base && head<tail)
             --tail;
-        
         if (a[tail]<base)
             a[head] = a[tail];
-        
         else
         {
             a[tail] = base;
             return tail;
         }
-        
         
         while(a[head]<=base && head<tail)
             ++head;
@@ -60,7 +57,6 @@ int findPivot(int a[], int low, int high)
             return tail;
         }
     }
-    
     return -1;
 
 }
@@ -84,4 +80,89 @@ void quickSort(int a[], int low, int high)
    
 }
 
+
+/*
+ 思路2:归并排序
+ 从中间将数组切分为pre和post两部分，对其分别递归->排序
+ 再将两个有序数组合并
+ 关键点在于如何合并两个有序数组
+ 用一个辅助函数merge实现
+ */
+
+/*
+ 该辅助函数将输入的一个数组视为两个数组
+ low - mid-1 和 mid - high-1
+ 这两个数组分别有序
+ 目标是将这两个分别有序的数组合并为一个有序数组，存放在原数组a中
+ 需要创建一个临时变量b[mid-low]存放low - mid中的元素
+ */
+void merge(int a[], int low, int mid, int high)
+{
+    
+    int length = mid-low;
+    int b[length];
+    
+    for (int i=0; i<length; ++i)
+        b[i] = a[low+i];
+    
+    int i=low;
+    
+    int j=0;
+    int k=0;
+    
+    while(j<length && mid+k<high)
+    {
+        if(b[j]<=a[mid+k])
+        {
+            a[i] = b[j];
+            ++j;
+            ++i;
+        }
+        else
+        {
+            a[i] = a[mid+k];
+            ++k;
+            ++i;
+        }
+    }
+    
+    while (j<length)
+    {
+        a[i] = b[j];
+        ++i;
+        ++j;
+    }
+    
+    while (mid+k<high)
+    {
+        a[i] = a[mid+k];
+        ++i;
+        ++k;
+    }
+    
+    return;
+    
+}
+
+void mergeSort(int a[], int low, int high)
+{
+    if (a == nullptr)
+    {
+        std::cerr<<"a should be an array, not nullptr";
+        exit(1);
+    }
+    
+    if (high-low<2)
+        return;
+    
+    int mid = (low+high)/2;
+    
+    mergeSort(a, low, mid);
+    mergeSort(a, mid, high);
+    
+    merge(a, low, mid, high);
+    
+    return;
+    
+}
 #endif /* sort_h */
