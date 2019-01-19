@@ -394,5 +394,88 @@ ListNode* reverseList(ListNode* head)
     return reversedHead;
 }
 
+/*
+ 目标：输入两个链表m,n，找到两个链表的第一个公共节点并返回，若无则返回nullptr
+ */
+
+/*
+ 思路：
+ 暴力方法复杂度为O(m*n)
+ 两个单向链表如果有公共节点，那么一定是一个Y型结构
+ 如果可以从后往前遍历，则一旦出现两个不相等的节点，则该节点之前的那个节点就是第一个公共节点
+ 因此如果先遍历m，再遍历n，将其节点分别入栈，之后再轮流出栈就可完成比较
+ 复杂度为O(m+n)，但是需要空间复杂度为O(m+n)
+ 
+ 更简单的方法，先遍历两个链表得到长度差为k
+ 对长的那个链表先走k步，之后两个链表同时前进，如果两个节点相同，则为公共节点
+ 该思路不需额外空间复杂度
+ */
+
+ListNode* findFirstCommonNode(ListNode* m, ListNode* n)
+{
+    if (!m && !n)
+        return nullptr;
+    
+    int lengthM = 0;
+    int lengthN = 0;
+    
+    ListNode* mHead = m;
+    ListNode* nHead = n;
+    
+    while (mHead->next != nullptr)
+    {
+        mHead = mHead->next;
+        ++lengthM;
+    }
+    
+    while (nHead->next != nullptr)
+    {
+        nHead = nHead->next;
+        ++lengthN;
+    }
+    
+    if (lengthM > lengthN)
+    {
+        int sub = lengthM - lengthN;
+        
+        while (sub>0)
+        {
+            m = m->next;
+            --sub;
+        }
+        
+        while (m != n)
+        {
+            m = m->next;
+            n = n->next;
+        }
+        
+        return m;
+    }
+    
+    else
+    {
+        int sub = lengthN - lengthM;
+        
+        while (sub>0)
+        {
+            n = n->next;
+            --sub;
+        }
+        
+        while (m != n)
+        {
+            m = m->next;
+            n = n->next;
+        }
+        
+        return m;
+    }
+    
+    
+}
+
+
+
 
 #endif /* ListNode_h */

@@ -7,32 +7,19 @@
 //
 
 #include <iostream>
-#include <istream>
-#include <set>
-#include <vector>
-#include <functional>
-#include <algorithm>
-#include "streamMedian.h"
+#include "reverseSentence.h"
 
 using namespace std;
 
-void printVector(const vector<int>& v)
-{
-    for(auto& elem:v)
-        cout<<elem<<endl;
-}
-
 int main(int argc, const char * argv[]) {
     
-    vector<int> myVector = {0,1,2,3,4,5,6,7};
+    char a[] = "i have a pen.";
     
-    getStreamMedian get = getStreamMedian();
+    reverSentence(a);
     
-    int temp = 0;
+    cout<<a<<endl;
     
-    while (cin>>temp)
-        get.insert(temp);
     
-    cout<<get.getMedian()<<endl;
+    
     
 }

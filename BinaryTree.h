@@ -11,6 +11,7 @@
 
 #include <assert.h>
 #include <stack>
+#include <algorithm>
 #include <ostream>
 
 struct BinaryTreeNode
@@ -276,6 +277,38 @@ void deserialize(BinaryTreeNode** root, std::istream& stream)
     return;
 }
 
+
+/*
+ 目标：输入一棵树t，输出其深度
+ */
+
+/*
+ 思路：
+ 分四种情况：
+ 如果没有子节点，则返回
+ 如果有左子树无右子树，深度为左子树深度+1
+ 如果有右子树无左子树，深度为右子树深度+1
+ 如果都有，则深度为更大的那个子树的深度+1
+ 
+ 递归
+ */
+
+
+
+int treeDepth(BinaryTreeNode* t)
+{
+    if (t == nullptr)
+        return 0;
+    
+    if (t->left == nullptr && t->right == nullptr)
+        return 0;    
+    else if (t->right == nullptr)
+        return treeDepth(t->left)+1;
+    else if (t->left == nullptr)
+        return treeDepth(t->right)+1;
+    else
+        return std::max(treeDepth(t->left),treeDepth(t->right)) + 1;
+}
 
 
 #endif /* BinaryTree_h */
