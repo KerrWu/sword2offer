@@ -11,12 +11,95 @@
 
 
 #include <stdio.h>
-
+#include <iostream>
 /*
  目标：打印1到max
  比如输入为3
  则打印1-999
  */
+
+/*
+ 不考虑大数情况
+ */
+void printOne2Max(int k)
+{
+    if (k<0)
+        exit(1);
+    
+    if (k==0)
+        std::cout<<0<<std::endl;
+    
+    
+    int max=1;
+    while(k>0)
+        max *= 10;
+    
+    for (int i=1; i<max; ++i)
+    {
+        std::cout<<i<<std::endl;
+    }
+}
+
+
+/*
+ 考虑大数情况
+ 用字符串表示数字
+ 即用一个字符串模拟1-max的加法
+ 1. 先确定位数,每一位初始化为'0'
+ 2. 用字符串完成加法，某一位尝试+1；若发生进位，则该为置0，flag变为1，下一位再尝试+1，若最高位发生进位，则stop，退出循环
+ */
+
+void printOne2Max2(int k)
+{
+    char a[k+1];
+    for (int i=0; i<k; ++i)
+        a[i] = '0';
+    a[k] = '\0';
+    
+    
+    int flag=1;
+    bool stop=false;
+    
+    while(!stop)
+    {
+
+        for (int i=k-1; i>=0; --i)
+        {
+            int curNum = a[i] - '0' + flag;
+            
+            if (curNum>=10)
+            {
+                if (i==0)
+                {
+                    stop=true;
+                    break;
+                }
+                else
+                {
+                    a[i] = '0';
+                }
+            }
+            
+            else
+            {
+                a[i] = '0' + curNum;
+                std::cout<<a<<std::endl;
+                break;
+            }
+            
+        }
+        
+        
+    }
+    
+}
+
+
+
+
+
+
+
 
 /*
  字符数组所表示的大数+1函数，返回一个stop，若最高位进位，则返回true，否则返回false

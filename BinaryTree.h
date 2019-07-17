@@ -112,16 +112,7 @@ BinaryTreeNode* construct(int* pre, int* mid, int length)
         ++i;
     
     assert(i<length);
-    
-    /*
-    int* leftPre = pre+1;
-    int* leftMid = mid;
-    
-    int* rightPre = pre+i+2;
-    int* rightMid = mid+i+2;
-     */
-    
-    
+
     
     node->left = construct((pre+1),  mid, i);
     node->right = construct( (pre+i+1), (mid+i+1), length-i-1);
@@ -129,6 +120,46 @@ BinaryTreeNode* construct(int* pre, int* mid, int length)
     return node;
     
 }
+
+//
+//
+///*
+// 输入：前中两个序列，length
+// 输出：根节点指针
+//
+// 前序顺序是：根-左子树前序-右子树前序
+// 中序顺序是：左子树中序-根-右子树中序
+//
+// 通过递归实现树的构建，每个节点左子树=constrcut(左前，左中，newLength)
+// */
+//BinaryTreeNode* construct2(int* pre, int* mid, int length)
+//{
+//    if (pre==nullptr || mid==nullptr || length<1)
+//        return;
+//
+//    int leftLength = 0;
+//    int rightLength = 0;
+//
+//    BinaryTreeNode* root = new BinaryTreeNode();
+//    root->value=pre[0];
+//
+//    while(mid[leftLength]!=pre[0])
+//        ++leftLength;
+//
+//    rightLength = length-leftLength-1;
+//
+//
+//    root->left = construct2(pre+1, mid, leftLength);
+//    root->right = construct2(pre+leftLength, mid+leftLength, rightLength);
+//
+//    return root;
+//
+//
+//}
+
+
+
+
 
 
 /*
@@ -139,7 +170,6 @@ BinaryTreeNode* construct(int* pre, int* mid, int length)
     如果只有右子树，则其下一个节点是其右子树的最左端节点
     如果左右子树都没有，则其下一个节点是其父节点
  */
-
 
 
 /*

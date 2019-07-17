@@ -7,18 +7,34 @@
 //
 
 #include <iostream>
-#include "reverseSentence.h"
+#include "ListNode.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
+
     
-    char a[] = "i have a pen.";
+    ListNode* head = new ListNode();
+    head->value = 0;
     
-    reverSentence(a);
+    head->next = new ListNode();
+    head->next->value = 1;
     
-    cout<<a<<endl;
+    head->next->next = new ListNode();
+    head->next->next->value = 2;
     
+    head->next->next->next = new ListNode();
+    head->next->next->next->value = 3;
+    
+    
+    ListNode* newHead = reverseHead(head);
+    
+    ListNode* pNewHead = newHead;
+    while(pNewHead)
+    {
+        cout<<pNewHead->value<<endl;
+        pNewHead = pNewHead->next;
+    }
     
     
     

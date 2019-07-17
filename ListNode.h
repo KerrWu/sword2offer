@@ -147,6 +147,53 @@ void removeNode(ListNode **head, ListNode *toRemove)
 }
 
 
+void deleteNode(ListNode** head, ListNode* object)
+{
+    //如果待删除的为头节点，且头节点存在next，则另头节点为下一节点
+    if (object == *head)
+    {
+        
+        if (object->next != nullptr)
+        {
+            ListNode* temp = *head;
+            *head = (*head)->next;
+            delete temp;
+        }
+        //如果不存在next，则令头节点为空
+        else
+        {
+            ListNode* temp = *head;
+            *head = nullptr;
+            delete temp;
+        }
+        
+    }
+    
+    
+    //否则如果待删除的为尾节点，即其next为nullptr，则需遍历一遍找到其上一个节点
+    else if (object->next == nullptr)
+    {
+        ListNode* temp = *head;
+        while(temp->next != object)
+            temp = temp->next;
+        
+        temp->next = nullptr;
+        delete object;
+    }
+    
+    
+    //否则，直接另当前节点的值为其next的值，再删除next节点
+    ListNode* temp = object->next;
+    
+    object->value = object->next->value;
+    object->next = object->next->next;
+    delete temp;
+    
+    
+}
+
+
+
 
 
 /*
@@ -182,6 +229,46 @@ void reversePrint(ListNode* head)
  目标：返回长度为n的链表中倒数第k个节点的值
  设尾节点为倒数第1个节点
  */
+
+/*
+ 设置两个指针，一个先走k步，然后两个一起走，先走的如果到尾节点，则后走的为倒数第k个节点
+ 如果第一个还未走k步就到了，则说明该链表中不足k个节点
+ */
+
+ListNode* findK2tail(ListNode* head, int k)
+{
+    if (head == nullptr)
+    {
+        std::cerr<<"List is empty";
+        exit(1);
+    }
+    
+    ListNode* pre = head;
+    ListNode* post = head;
+    
+    for (int i=0; i<k; ++i)
+    {
+        if (post->next != nullptr)
+            post = post->next;
+        else
+        {
+            std::cerr<<"List does not have k node";
+            exit(1);
+        }
+    }
+    
+    while(post!=nullptr)
+    {
+        post = post->next;
+        pre = pre->next;
+    }
+    
+    return pre;
+    
+}
+
+
+
 /*
  思路：
  该问题的关键在于如何判断n>k
@@ -238,6 +325,84 @@ int findKToLast(ListNode* head, int k)
 /*
  目标：判断链表中是否有环
  */
+
+/*
+ 输入一个链表的head，判断该链表中是否有环，如果有环，返回环的入口节点，如果无环，返回nullptr
+ 
+ 用两个指针，一个一次走一步，一个一次走两步，如果链表中有环，则二者会相遇。此时开始记录环的长度，即一次走一步的指针走多少步又回到这个节点，即得到环的长度n。
+ 之后重新设置两个指针，一个先走n步，之后两个一起走，两者相遇时，说明先走的节点已经多走了n个节点，又回到了入口与后走的节点相遇，此时相遇的节点就是环的入口
+ */
+ListNode* findCycle1(ListNode* head)
+{
+    if (head==nullptr)
+    {
+        exit(1);
+    }
+    
+    ListNode* fast = head;
+    ListNode* slow = head;
+    
+    do
+    {
+        if (fast->next)
+            fast = fast->next;
+        else
+            return nullptr;
+        
+        if (fast->next)
+            fast = fast->next;
+        else
+            return nullptr;
+        
+        slow = slow->next;
+    }
+    while(fast != slow);
+    
+    
+    
+    int count = 0;
+    ListNode* temp = slow;
+    
+    do
+    {
+        slow = slow->next;
+        ++count;
+    }
+    while(slow != temp);
+    
+    ListNode* pre = head;
+    ListNode* post = head;
+    
+    for(int i=0; i<count; ++i)
+    {
+        post = post->next;
+    }
+    
+    while (post!=pre)
+    {
+        post = post->next;
+        pre = pre->next;
+    }
+    
+    return post;
+    
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  链表中如果有环
  一个指针一次2步，一个一次一步，则两者必会在某个时刻相等
@@ -347,8 +512,41 @@ ListNode* findEntrance(ListNode* head)
 }
 
 /*
- 目标：反转输入列表。返回新列表的head节点
+ 目标：反转输入链表。返回新列表的head节点
  */
+/*
+ 反转一个节点，需要3个指针：
+ 指针pnode，指向当前节点
+ 指针ppre，指向当前节点前一个节点
+ 指针pnext，指向当前节点的下一个节点
+ 
+ 反转时，
+ 先存下next,即pnext = pnode->next;
+ 再令 pnode->next = ppre
+ 最后令ppre = pnext，pnode=pnext;
+ */
+ ListNode* reverseHead(ListNode* head)
+{
+    ListNode* pnext = nullptr;
+    ListNode* pnode = head;
+    ListNode* ppre = nullptr;
+    ListNode* reversedHead = nullptr;
+    
+    while(pnode != nullptr)
+    {
+        pnext = pnode->next;
+        if (pnext==nullptr)
+            reversedHead = pnode;
+        pnode->next = ppre;
+        ppre = pnode;
+        pnode = pnext;
+        
+    }
+    
+    return reversedHead;
+    
+}
+
 
 /*
  思路

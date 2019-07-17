@@ -79,7 +79,6 @@ int fibonacci2(int n)
 /*
  其实我们需要的只是n-1和n-2.不用保存之前所有结果
  */
-
 int fibonacci3(int n)
 {
     if (n<0)

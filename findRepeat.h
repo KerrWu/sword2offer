@@ -57,6 +57,7 @@ int findRepeat1(int a[], const int length)
 /*
  思路3
  
+ 边排序边找重
  在原数组上操作
  遍历原数组，如到第k个元素时，元素值为m
  先比较m是否等于k，
@@ -147,8 +148,64 @@ int findRepeat3(int a[], int length)
 
 
 /*
- 思路2
+ 构建hash table需要的空间复杂度为O(n),时间复杂度也为O(n)
  */
+int findRepeatNumber(int* a, int length)
+{
+    if (a==nullptr)
+    {
+        std::cerr<<"a is a nullptr";
+        exit(-1);
+    }
+    
+    int* temp = new int[length];
+    
+    for (int i=0;i<length;++i)
+        temp[i] = 0;
+    
+    for (int i=0;i<length; ++i)
+    {
+        if (temp[a[i]]==0)
+            ++temp[a[i]];
+        else
+        {
+            delete [] temp;
+            return a[i];
+        }
+        
+    }
+    
+    delete [] temp;
+    return -1;
+    
+}
+
+
+//边排序边找重
+int findRepeatNumber2(int a[], int length)
+{
+    int temp;
+    
+    for (int i=0;i<length;)
+    {
+        if (a[i]==i)
+            ++i;
+        else
+        {
+            if (a[i] == a[a[i]])
+                return a[i];
+            else
+            {
+                temp = a[a[i]];
+                a[a[i]] = a[i];
+                a[i] = temp;
+            }
+
+        }
+    }
+    
+    return -1;
+}
 
 
 #endif /* findRepeat_h */

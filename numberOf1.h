@@ -42,8 +42,45 @@ int numberof1_1(int n)
 
 
 /*
- 思路2:从数字规律出发
+输入一个数字n，判断其二进制表示中1的个数
+ 
+ 将n与1求&，若为1，则该位为1，再将1左移，判断下一位，直到1左移32位后为0，停止
+ 复杂度为O(32)=O(1)
  */
 
+int numberOf1(int n)
+{
+    int flag=1;
+    int count=0;
+    
+    while(flag)
+    {
+        if (n & flag)
+            ++count;
+        flag = flag<<1;
+    }
+    
+    return count;
+    
+    
+}
+
+
+/*
+ 解法2:n-1与n进行位与运算，即可将n的最后一个非零位置0，n有多少个非零位，就可进行多少次该操作
+ 因此不断对n进行该操作，直到n变为0，即为n的非零位个数
+ */
+
+int numberOf1_2(int n)
+{
+    int count=0;
+    
+    while (n)
+    {
+        n = n & (n-1);
+        ++count;
+    }
+    return count;
+}
 
 #endif /* numberOf1_h */

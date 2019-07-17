@@ -98,5 +98,65 @@ singleton2* singleton2::s = nullptr;
 std::mutex singleton2::sMutex;
 
 
+//上面的实现问题在于lock的时候可能不同线程的程序都已经进入if语句块中，相当于没用多线程，故进入if后还要再判断一次，如下所示
+
+
+struct mySingle
+{
+    static int exist;
+    static std::mutex myMutex;
+    
+    
+private:
+    mySingle(){}
+    
+public:
+    static mySingle* create()
+    {
+        if (mySingle::exist==0)
+        {
+            mySingle::myMutex.lock();
+            if (mySingle::exist==0)
+            {
+                mySingle::exist=1;
+                myMutex.unlock();
+                return new mySingle();
+            }
+            else
+            {
+                std::cerr<<"instance already exist\n";
+                exit(0);
+            }
+        }
+        else
+        {
+            std::cerr<<"instance already exist\n";
+            exit(0);
+        }
+    }
+};
+int mySingle::exist=0;
+std::mutex mySingle::myMutex;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif
